@@ -1,0 +1,29 @@
+# CMake and build output
+cmake-build-*/
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+
+# IDE settings
+.idea/
+.vs/
+*.user
+*.suo
+
+# Visual Studio and compiler output
+Debug/
+Release/
+x64/
+x86/
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.dll
+*.exe
+*.lib
+
+# Generated dependency files
+_deps/
