@@ -15,6 +15,17 @@ start it before connecting DS5-Web-Audio-Haptics.
 
 ## For users
 
+### Download
+
+Download the `.zip` package containing the executable from the
+[Gamepad Socket v1.0.0 release](https://github.com/rafaelvaloto/Gamepad_Socket/releases/tag/v1.0.0).
+Extract the package to a folder of your choice, then run `Gamepad_Socket.exe` from
+PowerShell or Command Prompt.
+
+> **Windows security warning:** The executable is not digitally signed. Windows may
+> display a security message when you open it. If you trust the downloaded release,
+> select **More info** and then **Run anyway** to continue.
+
 Before starting the server, install the [ViGEmBus driver](https://github.com/nefarius/ViGEmBus/releases/download/v1.22.0/ViGEmBus_1.22.0_x64_x86_arm64.exe).
 
 Open PowerShell or Command Prompt, then run the executable with the controller type
