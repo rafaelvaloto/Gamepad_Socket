@@ -69,17 +69,43 @@ cmake --build build --config Release
 
 The executable is generated at `build\Release\Gamepad_Socket.exe`.
 
-## WebSocket protocol
+### WebSocket Protocol
 
-The browser extension must connect using `ws://` and send the commands as WebSocket
-text messages. Each message contains one or more space-separated `field=value` pairs.
-Input state is preserved between messages until a field is changed.
+The client must connect using `ws://` and send the gamepad state as **Binary WebSocket frames** (`ArrayBuffer`). To ensure zero parsing overhead on the server, the payload must be exactly **12 bytes** long, mirroring the native `XUSB_REPORT` C++ structure in Little-Endian format.
 
-```text
-cross=1 lx=0.5 ly=-1 lt=0.8
-cross=0
-reset
-```
+#### Payload Structure (12 Bytes)
+
+| Offset | Type        | Range              | Description               |
+| :----- | :---------- | :----------------- | :------------------------ |
+| `0x00` | `uint16_le` | `0` to `65535`     | Buttons bitmask           |
+| `0x02` | `uint8`     | `0` to `255`       | Left Trigger              |
+| `0x03` | `uint8`     | `0` to `255`       | Right Trigger             |
+| `0x04` | `int16_le`  | `-32768` to `32767`| Left Analog X             |
+| `0x06` | `int16_le`  | `-32768` to `32767`| Left Analog Y             |
+| `0x08` | `int16_le`  | `-32768` to `32767`| Right Analog X            |
+| `0x0A` | `int16_le`  | `-32768` to `32767`| Right Analog Y            |
+
+#### Button Bitmask Mapping
+
+Use bitwise OR (`|`) to combine multiple active buttons.
+
+* `0x0001` - D-Pad Up
+* `0x0002` - D-Pad Down
+* `0x0004` - D-Pad Left
+* `0x0008` - D-Pad Right
+* `0x0010` - Start / Options
+* `0x0020` - Back / Share
+* `0x0040` - Left Stick Click (L3)
+* `0x0080` - Right Stick Click (R3)
+* `0x0100` - Left Bumper (L1)
+* `0x0200` - Right Bumper (R1)
+* `0x0400` - Guide / PS Button
+* `0x1000` - A / Cross
+* `0x2000` - B / Circle
+* `0x4000` - X / Square
+* `0x8000` - Y / Triangle
+
+*Note: The server expects a continuous stream of the full state. State is not preserved between frames if fields are omitted, as the entire 12-byte buffer overwrites the current gamepad state.*
 
 Supported fields:
 
