@@ -1,0 +1,36 @@
+﻿name: Build and Release Gamepad Socket
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: #
+
+jobs:
+  build-and-release:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S . -B build
+
+      - name: Build with CMake
+        run: cmake --build build --config Release
+
+      - name: Upload Unsigned Artifact (Temporary)
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gamepad_Socket_Unsigned
+          path: build\Release\Gamepad_Socket.exe
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build\Release\Gamepad_Socket.exe
+          generate_release_notes: true
