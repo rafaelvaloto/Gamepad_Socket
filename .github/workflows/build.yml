@@ -1,4 +1,4 @@
-﻿name: Build and Release Gamepad Socket
+name: Build and Release Gamepad Socket
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Upload Unsigned Artifact (Temporary)
         id: upload-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Gamepad_Socket_Unsigned
           path: build\Release\Gamepad_Socket.exe
